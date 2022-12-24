@@ -9,6 +9,9 @@ echo "Lendo secrets..."
 kubectl apply -f ./secrets.yml
 rm ./secrets.yml
 
+echo "Criando load balancer no cluster k8s..."
+kubectl apply -f .\load-balancer.yml --record
+
 echo "Realizando deployment no cluster k8s..."
 kubectl apply -f .\mysql-deployment.yml --record
 kubectl apply -f .\app-deployment.yml --record
