@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+    name: mysql-dados
+spec:
+    AccessModes:
+        ReadWriteOnce
+    resources:
+        requests:
+            storage: 10Gi
+    stoageClassNames: standard-rwo
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: mysql
+spec:
+    selector:
+        matchLabels:
+            app: mysql
+    template:
+        metadata:
+            labels:
+                app: mysql
+        spec:
+            containers:
+                - image: mysql:latest
+                    imagePullPolicy: Always
+                    name: mysql
+                    ports:
+                    -containerPort: 3306
+            env:
+              - name: MYSQL_ROOT_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: my-what
+                    key: ROOT_PASSWORD
+              - name: MYSQL_DATABASE
+                valueFrom:
+                  secretKeyRef:
+                    name: my-what
+                    key: MYSQL_DATABASE
+            volumeMounts:
+            - mountPath: /var/lib/mysql/
+              name: mysql-dados
+            volumes:
+            - name: mysql-dados
+                persistentVolumeClaim:
+                    claimName: mysql-dados
+
+---
+apiVersion: v1
+kind: Service
+metada:
+    name: mysql-connection
+spec:
+    selector:
+        app: mysql
+    ports:
+        - port: 3306
+    clusterIP: None
