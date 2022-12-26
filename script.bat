@@ -1,9 +1,9 @@
 
 echo "Processando imagem..."
-docker build -t docker-hub-user/k8s-projeto2-app:1.0 app/.
+docker build -t jmignet/k8s-projeto2-app:1.0 app/.
 
 echo "Fazendo upload da imagem..."
-docker push docker-hub-user/k8s-projeto2-app:1.0
+docker push jmignet/k8s-projeto2-app:1.0
 
 echo "Lendo secrets..."
 kubectl apply -f ./secrets.yml

@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: app
-        image: docker-hub-user/k8s-projeto2-app:1.0
+        image: jmignet/k8s-projeto2-app:1.0
         imagePullPolicy: Always
         ports:
         - containerPort: 80
